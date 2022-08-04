@@ -23,17 +23,19 @@ The script needs a file called `words.txt` to get its words from. I don't know w
 
 ## Performance
 
-This script uses some optimizations to get good performance despite it being Python. This includes:
+The script is surprisingly performant. It finds all solutions for the official NYT Wordle guess list in about 1.5 seconds, and all solutions for [dwyl's list](https://github.com/dwyl/english-words/blob/master/words_alpha.txt) in about 3.5 seconds. (On my 2-year-old "gaming pc".) This is faster than any other solution I've come across, including solutions in [Java](https://github.com/neilcoffey/FunStuff/tree/main/WordleFiveWordFinder) and [C++](https://github.com/spinglass/WordFinder).
+
+Some important optimizations of the script are.
 1) Discarding words that cannot occur in any solution, e.g. because they have repeat letters or are the wrong length.
 2) Avoiding repeated work by merging branches of the search tree when they have the same leaf.
 3) When refining the search tree, prioritizing words with uncommon letters, so early branching is reduced.
 4) Representing words (or more precisely, equivalence classes of words under the anagram relation) as integers, each bit representing a letter from the alphabet.
 
-As a result, it finds all solutions for the official NYT Wordle guess list in about 1.5 seconds, and all solutions for [this list](https://github.com/dwyl/english-words/blob/master/words_alpha.txt) in about 3.5 seconds. (On my 2-year-old "gaming pc".)
+The algorithm spends most of its time comparing partial solutions to words, in order to check whether these words can be used to extend the partial solution. For [dwyl's list](https://github.com/dwyl/english-words/blob/master/words_alpha.txt), it performs about 30 million of these checks. In fact, counting the number of comparisons by incrementing a counter before every check almost *doubles* the time it takes for the script to finish. This tells me that, firstly, most of the time is indeed spent doing these checks and, secondly, a check costs about as much time (on average) as incrementing an integer.
 
 If I were to further optimize the code, I would consider:
 1) Use a completely different technique. The way we're representing words as integers / bits makes both [linear programming](https://en.wikipedia.org/wiki/Linear_programming) and [SAT solvers](https://en.wikipedia.org/wiki/SAT_solver) seem natural approaches.
-2) Currently, the code uses 26 lists, on for each letter of the alphabet, namely the list of words containing that letter. This is what allowed the biggest optimization, namely trying words with rare letters first. Maybe it's possible to use ```26 * 25 / 2 = 325``` lists, one for each pair of letter, namely the list of words containing both of those letters. How would you use this information?
+2) Since most of our time is spent checking whether words fit onto partial solutions, we probably want to reduce the number of checks as much as possible. Right now, each partial solution is checked against about 150 words on average, of which only about 1 actually passes the check. Perhaps there's some kind of data structure which finds that 1 passing word instantly or in $log(150)$ time?
 3) Threading, parrallelization, NumPy, C.
 
 ## Computational complexity
