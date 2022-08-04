@@ -19,4 +19,4 @@ I got this idea from [this video](https://youtu.be/_-AfhLQfb6w) by Matt Parker, 
 
 ## Where's the word list?
 
-The script needs a file called `words.txt` to get its words from. I don't know what license if any applies to the official NYT Wordle guess list, so I have not included it in this GNU GPLv3 project. It is however available [here](https://github.com/tabatkins/wordle-list).
+The script needs a file called `words.txt` to get its words from. I don't know what license if any applies to the official NYT Wordle guess list, so I have not included it in this GNU GPLv3 project. You can download it here [here](https://github.com/tabatkins/wordle-list), and manually put it in the same folder as `solve.py`.
