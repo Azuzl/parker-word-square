@@ -12,6 +12,7 @@ This square is special because:
 1) Each of the 5 rows of the square is a 5-letter word.
 2) The words have no letters in common with each other. i.e. they use 25 unique letters.
 3) Each word is a valid [Wordle](https://www.nytimes.com/games/wordle/index.html) guess.
+
 Given a list of words, such as the one in (3), this script produces sets of five 5-letter words satisfying properties (1) and (2).
 
 I got this idea from [this video](https://youtu.be/_-AfhLQfb6w) by Matt Parker, who in turn got it from a listener of his podcast.
