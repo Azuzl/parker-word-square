@@ -35,3 +35,19 @@ If I were to further optimize the code, I would consider:
 1) Use a completely different technique. The way we're representing words as integers / bits makes both [linear programming](https://en.wikipedia.org/wiki/Linear_programming) and [SAT solvers](https://en.wikipedia.org/wiki/SAT_solver) seem natural approaches.
 2) Currently, the code uses 26 lists, on for each letter of the alphabet, namely the list of words containing that letter. This is what allowed the biggest optimization, namely trying words with rare letters first. Maybe it's possible to use ```26 * 25 / 2 = 325``` lists, one for each pair of letter, namely the list of words containing both of those letters. How would you use this information?
 3) Threading, parrallelization, NumPy, C.
+
+## Computational complexity
+
+In order to talk about the computational complexity of this algorithm, as well as other algorithms solving the same problem, let's introduce some names:
+- Let $n$ be the number of words in the `words.txt`.
+- Let $w$ be the length we want the words to be. Let's assume every word in `words.txt` is already $w$ letters long.
+- Let $h$ be the number of words we want each solution to be. (In `solve.py` I assume that $w = h = 5$ because we wanted a 5 by 5 square, but in general we may want any rectangular shape.)
+- Let $s$ be the size of the alphabet.
+- Let $t = t(n, w, h, s)$ be the worst-case time it takes some particular algorithm to solve the problem given the values of $n, w, h$ and $s$. 
+- Let's assume we only need our algorithm to print out 1 valid word rectangle (of width $w$ and height $h$) if one exists.
+
+Note that the length of the input is asymptotically equal to $nw\log_2s$, and the length of the output is asymptotically equal to $wh\log_2s$, so a simple lower bound for the complexity of the problem is $$t = \Omega((n+h)w\log_2s),$$ or if $w, h$ and $s$ are constant (e.g. $w=h=5$ and $s=26$), the lower bound is just $$t = \Omega(n).$$
+
+Perhaps surprisingly, assuming $w, h$ and $s$ are constant, even brute force algorithms may have complexity $\Omega(n)$, meeting the lower bound. This is because there's only $s^w$ possible different words, which would also be constant. So if you first filter out duplicates, which you can do in $\Omega(n)$ time, the size of the problem becomes bounded by a constant, and can be solved in constant time by e.g. a giant lookup table.
+
+However, in practice, brute force algorithms have performance that looks like $t \sim n^h$, at least for relatively small values of $n$. This is because such algorithms consider every way to pick $h$ words from a list of $n$ different words, e.g. using $h$ nested loops of length $n$. My algorithm ends up working quite similarly to brute-force algorithms in this sense. For example, if $w = h = 5$ but $s=24,$ and every letter in the alphabet was about equally common, then my algorithm would check a large chunk of those $n^k$ combinations, but never find a solution (because there is none). However, it still performs faster in practice, because it branches on words containing uncommon letters first, of which there are much fewer than $n$.
