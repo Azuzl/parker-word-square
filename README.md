@@ -32,5 +32,6 @@ This script uses some optimizations to get good performance despite it being Pyt
 As a result, it finds all solutions for the official NYT Wordle guess list in about 1.5 seconds, and all solutions for [this list](https://github.com/dwyl/english-words/blob/master/words_alpha.txt) in about 3.5 seconds. (On my 2-year-old "gaming pc".)
 
 If I were to further optimize the code, I would consider:
-1) Currently, the code uses 26 lists, on for each letter of the alphabet, namely the list of words containing that letter. This is what allowed the biggest optimization, namely trying words with rare letters first. Maybe it's possible to use ```26 * 25 / 2 = 325``` lists, one for each pair of letter, namely the list of words containing both of those letters. Maybe it's possible to use fewer lists.
-2) Threading, parrallelization, NumPy, C.
+1) Use a completely different technique. The way we're representing words as integers / bits makes both [linear programming](https://en.wikipedia.org/wiki/Linear_programming) and [SAT solvers](https://en.wikipedia.org/wiki/SAT_solver) seem natural approaches.
+2) Currently, the code uses 26 lists, on for each letter of the alphabet, namely the list of words containing that letter. This is what allowed the biggest optimization, namely trying words with rare letters first. Maybe it's possible to use ```26 * 25 / 2 = 325``` lists, one for each pair of letter, namely the list of words containing both of those letters. How would you use this information?
+3) Threading, parrallelization, NumPy, C.
