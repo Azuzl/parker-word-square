@@ -40,6 +40,8 @@ If I were to further optimize the code, I would consider:
 
 ## Computational complexity
 
+(This section is very incomplete.)
+
 In order to talk about the computational complexity of this algorithm, as well as other algorithms solving the same problem, let's introduce some names:
 - Let $n$ be the number of words in the `words.txt`.
 - Let $w$ be the length we want the words to be. Let's assume every word in `words.txt` is already $w$ letters long.
